@@ -60,6 +60,7 @@ import static java.util.stream.Collectors.joining;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PaginationInterceptor extends AbstractSqlParserHandler implements Interceptor {
 
+    private Boolean mapUnderscoreToCamelCase = true;
     /**
      * COUNT SQL 解析
      */
@@ -77,6 +78,13 @@ public class PaginationInterceptor extends AbstractSqlParserHandler implements I
      */
     private String dialectClazz;
 
+    public PaginationInterceptor() {
+    }
+
+    public PaginationInterceptor(Boolean mapUnderscoreToCamelCase) {
+        this.mapUnderscoreToCamelCase = mapUnderscoreToCamelCase;
+    }
+
     /**
      * 查询SQL拼接Order By
      *
@@ -85,7 +93,7 @@ public class PaginationInterceptor extends AbstractSqlParserHandler implements I
      * @param orderBy     是否需要拼接Order By
      * @return
      */
-    public static String concatOrderBy(String originalSql, IPage page, boolean orderBy) {
+    public String concatOrderBy(String originalSql, IPage page, boolean orderBy) {
         if (orderBy && (ArrayUtils.isNotEmpty(page.ascs())
             || ArrayUtils.isNotEmpty(page.descs()))) {
             StringBuilder buildSql = new StringBuilder(originalSql);
@@ -108,10 +116,11 @@ public class PaginationInterceptor extends AbstractSqlParserHandler implements I
      * @param columns
      * @param orderWord
      */
-    private static String concatOrderBuilder(String[] columns, String orderWord) {
+    private String concatOrderBuilder(String[] columns, String orderWord) {
         if (ArrayUtils.isNotEmpty(columns)) {
             return Arrays.stream(columns).filter(StringUtils::isNotEmpty)
-                .map(i -> i + orderWord).collect(joining(StringPool.COMMA));
+                .map(i -> (mapUnderscoreToCamelCase ? StringUtils.camelToUnderline(i) : i) + orderWord)
+                .collect(joining(StringPool.COMMA));
         }
         return StringUtils.EMPTY;
     }

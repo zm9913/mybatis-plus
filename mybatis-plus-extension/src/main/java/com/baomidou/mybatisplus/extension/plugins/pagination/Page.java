@@ -17,9 +17,12 @@ package com.baomidou.mybatisplus.extension.plugins.pagination;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -48,7 +51,7 @@ public class Page<T> implements IPage<T> {
     /**
      * 当前页
      */
-    private long current = 1;
+    private long current = 0;
     /**
      * <p>
      * SQL 排序 ASC 数组
@@ -76,6 +79,23 @@ public class Page<T> implements IPage<T> {
 
     public Page() {
         // to do nothing
+    }
+
+    public Page(Pageable pageable) {
+        this(pageable.getPageNumber(), pageable.getPageSize());
+        Iterator<Sort.Order> it = pageable.getSort().iterator();
+        List<String> descs = new ArrayList<>();
+        List<String> ascs = new ArrayList<>();
+        while (it.hasNext()) {
+            Sort.Order order = it.next();
+            if (Objects.equals(order.getDirection(), Sort.Direction.ASC)) {
+                ascs.add(order.getProperty());
+            } else {
+                descs.add(order.getProperty());
+            }
+        }
+        setAscs(ascs);
+        setDescs(descs);
     }
 
     /**
@@ -115,7 +135,7 @@ public class Page<T> implements IPage<T> {
      * @return true / false
      */
     public boolean hasPrevious() {
-        return this.current > 1;
+        return this.current > 0;
     }
 
     /**
@@ -126,7 +146,7 @@ public class Page<T> implements IPage<T> {
      * @return true / false
      */
     public boolean hasNext() {
-        return this.current < this.getPages();
+        return this.current < this.getPages() - 1;
     }
 
     @Override
@@ -244,4 +264,10 @@ public class Page<T> implements IPage<T> {
         this.optimizeCountSql = optimizeCountSql;
         return this;
     }
+
+    public org.springframework.data.domain.Page<T> toPage(){
+        return new PageImpl<>(this.getRecords(), PageRequest.of((int)this.getCurrent(), (int)this.getSize()), this.getTotal());
+    }
+
+
 }

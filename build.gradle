@@ -19,6 +19,7 @@ ext {
         springVersion = '5.1.2.RELEASE',
         springBootVersion = '2.1.0.RELEASE',
         jsqlparserVersion = '1.3',
+        springDataCommons='2.0.13.RELEASE'
     ]
 
     dependencies = [
@@ -32,6 +33,7 @@ ext {
         "spring-tx"                         : "org.springframework:spring-tx:${springVersion}",
         "spring-web"                        : "org.springframework:spring-web:${springVersion}",
         "spring-aop"                        : "org.springframework:spring-aop:${springVersion}",
+        "spring-aop"                        : "org.springframework.data:spring-data-commons:${springDataCommons}",
         "cglib"                             : "cglib:cglib:3.2.6",
         "lombok"                            : "org.projectlombok:lombok:1.18.4",
 
@@ -70,8 +72,8 @@ ext {
 }
 
 allprojects {
-    group = 'com.baomidou'
-    version = '3.0.7.4-SNAPSHOT'
+    group = 'com.bp'
+    version = '3.0.7.7'
 }
 
 description = "Mybatis 增强工具包 - 只做增强不做改变，简化CRUD操作"
@@ -155,10 +157,10 @@ subprojects {
 
         repositories {
             maven {
-                def userName = System.getProperty("un")
-                def passWord = System.getProperty("ps")
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                def userName = "admin"
+                def passWord = "admin123"
+                def releasesRepoUrl = "http://gitlab.sugar5.club:18081/repository/maven-releases/"
+                def snapshotsRepoUrl = "http://gitlab.sugar5.club:18081/repository/maven-snapshots/"
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
                 credentials {

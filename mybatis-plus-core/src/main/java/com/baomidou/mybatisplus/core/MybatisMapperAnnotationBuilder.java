@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Arg;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.CacheNamespaceRef;
@@ -441,7 +442,7 @@ public class MybatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
         } else if (resolvedReturnType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) resolvedReturnType;
             Class<?> rawType = (Class<?>) parameterizedType.getRawType();
-            if (Collection.class.isAssignableFrom(rawType) || Cursor.class.isAssignableFrom(rawType)) {
+            if (Collection.class.isAssignableFrom(rawType) || Cursor.class.isAssignableFrom(rawType)|| IPage.class.isAssignableFrom(rawType)) {
                 Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
                 if (actualTypeArguments != null && actualTypeArguments.length == 1) {
                     Type returnTypeParameter = actualTypeArguments[0];
