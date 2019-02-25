@@ -265,9 +265,7 @@ public class Page<T> implements IPage<T> {
         return this;
     }
 
-    public org.springframework.data.domain.Page<T> toPage(){
-        return new PageImpl<>(this.getRecords(), PageRequest.of((int)this.getCurrent(), (int)this.getSize()), this.getTotal());
-    }
+
 
 
 }

@@ -15,6 +15,9 @@
  */
 package com.baomidou.mybatisplus.core.metadata;
 
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -201,4 +204,10 @@ public interface IPage<T> extends Serializable {
         List<R> collect = this.getRecords().stream().map(mapper).collect(toList());
         return ((IPage<R>) this).setRecords(collect);
     }
+
+    default org.springframework.data.domain.Page<T> toPage(){
+        return new PageImpl<>(getRecords(), PageRequest.of((int)getCurrent(), (int)getSize()), getTotal());
+    }
+
+
 }

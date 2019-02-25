@@ -73,7 +73,7 @@ ext {
 
 allprojects {
     group = 'com.bp'
-    version = '3.0.7.7'
+    version = '3.0.7.8'
 }
 
 description = "Mybatis 增强工具包 - 只做增强不做改变，简化CRUD操作"
@@ -157,10 +157,10 @@ subprojects {
 
         repositories {
             maven {
-                def userName = "admin"
-                def passWord = "admin123"
-                def releasesRepoUrl = "http://gitlab.sugar5.club:18081/repository/maven-releases/"
-                def snapshotsRepoUrl = "http://gitlab.sugar5.club:18081/repository/maven-snapshots/"
+                def userName = System.getProperty("un")
+                def passWord = System.getProperty("ps")
+                def releasesRepoUrl = "https://repo.rdc.aliyun.com/repository/55368-release-xM3c1V/"
+                def snapshotsRepoUrl = "https://repo.rdc.aliyun.com/repository/55368-snapshot-WHYnGf/"
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
                 credentials {
